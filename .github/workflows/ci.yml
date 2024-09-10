@@ -3,7 +3,7 @@ name: Check conventions
 on:
   # Runs on pushes targeting the default branch
   pull_request:
-    types: [opened, reopened]
+    types: [opened, reopened, synchronize]
 
 jobs:
   # Build job
