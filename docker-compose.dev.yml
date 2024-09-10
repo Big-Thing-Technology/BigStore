@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+
+
+  kanban-admin-service:
+    container_name: kanban-admin-service
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - DATABASE_URL=mongodb://root:Espot168@mongodb-kanban:27017/localES?authSource=admin&retryWrites=false&directConnection=true
+        - SECRET_TOKEN_KEY=yourTokenSecret
+        - INIT_ADMIN_PASSWORD=Espot@168
+        - INIT_ADMIN_USERNAME=admin
+        - INIT_ADMIN_EMAIL=ericchen.tch@gmail.com
+    ports:
+      - "3000:3000"
+    networks:
+      - kanban-network
+
+networks:
+  kanban-network:
+    external: true
+

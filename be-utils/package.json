@@ -1,0 +1,45 @@
+{
+  "name": "backend-utils",
+  "version": "1.0.0",
+  "description": "Kit for backend",
+  "scripts": {
+    "test": "yarn test",
+    "build": "rm -rf dist && rollup -c --bundleConfigAsCjs",
+    "update-version": "node -r dotenv/config ./auto-update-version.js"
+  },
+  "author": "Eric Tran",
+  "license": "ISC",
+  "dependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.5",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/npmlog": "^7.0.0",
+    "axios": "^1.6.2",
+    "bcryptjs": "^2.4.3",
+    "directory-tree": "^3.5.1",
+    "dotenv": "^16.3.1",
+    "jsonwebtoken": "^9.0.2",
+    "npmlog": "^7.0.1",
+    "rollup": "^4.3.0",
+    "rollup-plugin-dts": "^6.1.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "tslib": "^2.6.2",
+    "typescript": "^5"
+  },
+  "peerDependencies": {
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/npmlog": "^7.0.0",
+    "axios": "^1.6.2",
+    "jsonwebtoken": "^9.0.2",
+    "npmlog": "^7.0.1"
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "files": [
+    "dist"
+  ],
+  "types": "dist/index.d.ts"
+}

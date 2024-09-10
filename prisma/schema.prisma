@@ -1,0 +1,150 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  username        String         @unique
+  fullName        String
+  email           String         @unique
+  emailVerified   Boolean        @default(false)
+  password        String
+  active          Boolean        @default(true)
+  twoFA           Boolean        @default(false)
+  initAvatarColor String
+  avatarUrl       String         @default("")
+  starBoards      String[]
+  activity        Activity[]
+  notification    Notification[]
+  isAdmin         Boolean        @default(false)
+  isInitAdmin     Boolean        @default(false)
+  deleted         Boolean        @default(false)
+  language        String         @default("en")
+
+  roleAssignment RoleAssignment[]
+}
+
+model Notification {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  notiUser   User      @relation(fields: [userId], references: [id])
+  userId     String    @db.ObjectId
+  created    DateTime
+  activity   Activity? @relation(fields: [activityId], references: [id])
+  activityId String?   @db.ObjectId
+}
+
+enum WatchStatus {
+  WATCHING
+  TRACKING
+  MUTE
+}
+
+model Board {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  slug        String     @unique
+  description String
+  archived    Boolean    @default(false)
+  list        List[]
+  swimlane    Swimlane[]
+
+  roleAssignment RoleAssignment[]
+}
+
+model Swimlane {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  archived Boolean @default(false)
+  color    String  @default("")
+  board    Board?  @relation(fields: [boardId], references: [id])
+  boardId  String? @db.ObjectId
+  nextId   String? @db.ObjectId
+}
+
+model List {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  archived Boolean @default(false)
+  index    Int
+  board    Board?  @relation(fields: [boardId], references: [id])
+  boardId  String? @db.ObjectId
+}
+
+enum CustomFieldType {
+  Date
+  String
+  Number
+  BigText
+}
+
+model CustomField {
+  id   String          @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  type CustomFieldType
+}
+
+enum ActivityType {
+  ADD_ATTACHMENT
+  DELETE_ATTACHMENT
+  ADD_LABEL
+  REMOVE_LABEL
+  ADD_CHECKLIST
+  ADD_CHECKLIST_ITEM
+  REMOVE_CHECKLIST
+  REMOVE_CHECKLIST_ITEM
+  CHECKED_CHECKLIST_ITEM
+  UNCHECKED_CHECKLIST_ITEM
+  COMPLETE_CHECKLIST
+  COMPLTETED_CHECKLIST_ITEM
+  ADD_COMMENT
+  EDIT_COMMNET
+  DELETE_COMMENT
+  CREATE_SWIMLANE
+  CREATE_CARD
+  CREATE_LIST
+  ADD_BOARD_MEMBER
+  REMOVE_BOARD_MEMEBER
+  JOIN_ASSIGNEE
+  UNJOIN_ASSIGNEE
+  MOVE_CARD
+  SET_DUE_AT
+  SET_END_AT
+  SET_START_AT
+  ADD_DESCRIPTION
+  EDIT_DESCRIPTION
+}
+
+model Activity {
+  id           String         @id @default(auto()) @map("_id") @db.ObjectId
+  author       User?          @relation(fields: [userId], references: [id])
+  userId       String?        @db.ObjectId
+  created      DateTime
+  updated      DateTime
+  actions      ActivityType
+  notification Notification[]
+}
+
+model Role {
+  id          String           @id @default(auto()) @map("_id") @db.ObjectId
+  roleName    String           @unique
+  endpoints   String[]
+  default     Boolean          @default(false)
+  assignments RoleAssignment[]
+}
+
+model RoleAssignment {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  boardId String @db.ObjectId
+  userId  String @db.ObjectId
+  roleId  String @db.ObjectId
+  board   Board  @relation(fields: [boardId], references: [id])
+  user    User   @relation(fields: [userId], references: [id])
+  role    Role   @relation(fields: [roleId], references: [id])
+
+  @@unique([boardId, userId, roleId])
+}

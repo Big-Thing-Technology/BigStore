@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  mongodb-kanban:
+    container_name: mongodb-kanban
+    build:
+      context: .
+      dockerfile: Dockerfile.db
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: Espot168
+    ports:
+      - "27017:27017"
+    command: --replSet rs0 --keyFile /etc/mongo-keyfile --bind_ip_all --port 27017
+    healthcheck:
+      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'127.0.0.1:27017'}]}) }" | mongosh --port 27017 -u root -p Espot168 --authenticationDatabase admin
+      interval: 10s
+      timeout: 15s
+      start_period: 15s
+      retries: 10
+    volumes:
+      - data:/data/db
+    networks:
+      - kanban-network
+
+volumes:
+  data: { }
+
+networks:
+  kanban-network:
+    external: true
