@@ -5,3 +5,4 @@ next-env.d.ts
 *.mjs
 *.js
 tailwind.config.ts
+/be-utils

@@ -12,7 +12,8 @@
     "check-format": "prettier --check .",
     "check-lint": "eslint . --ext ts --ext tsx --ext js",
     "check-types": "tsc --pretty --noEmit",
-    "initData": "yarn vite-node server-functions/init.ts"
+    "initData": "yarn vite-node server-functions/init.ts",
+    "install-all": "yarn && cd be-utils && yarn && yarn build && cd .."
   },
   "dependencies": {
     "@hello-pangea/dnd": "^16.6.0",
