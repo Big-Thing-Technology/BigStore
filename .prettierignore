@@ -4,3 +4,4 @@ next.config.js
 next-env.d.ts
 *.yml
 /be-utils
+/.github
