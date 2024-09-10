@@ -3,3 +3,5 @@ next.config.js
 .next
 next-env.d.ts
 *.yml
+/be-utils
+/.github
